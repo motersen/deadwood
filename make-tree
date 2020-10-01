@@ -1,0 +1,11 @@
+#!/bin/sh
+
+mkdir -p new/new/new
+mkdir -p old/old/old
+
+touch -at 197001010000 old/file old/old/file old/old/old/file
+touch -at 197001010000 new/file new/new/new/file
+touch new/new/file
+
+touch -at 197001010000 file.old
+touch file.new
