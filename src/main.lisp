@@ -5,7 +5,8 @@
         :uiop)
   (:import-from :unix-opts)
   (:use-reexport :deadwood/find
-                 :deadwood/filesystem)
+                 :deadwood/filesystem
+                 :deadwood/utility)
   (:export :main))
 
 (in-package :deadwood/main)
@@ -53,15 +54,7 @@
             (remove (getf options :remove))
             (paths (mapcar #'truename paths)))
         (multiple-value-bind (old-dirs old-files)
-            (values-list
-             (mapcar #'reverse
-                     (reduce (lambda (results-path-a results-path-b)
-                               (list (cons (car results-path-b)
-                                           (car results-path-a))
-                                     (cons (cadr results-path-b)
-                                           (cadr results-path-a))))
-                             (mapcar #'find-old-files paths)
-                             :initial-value '(() ()))))
+            (values-list (zip (mapcar #'find-old-files paths)))
           (if remove
               (handler-bind ((file-error #'report-removal-errors))
                 (mapc

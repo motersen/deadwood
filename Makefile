@@ -6,7 +6,7 @@ define ENV
 env MAKEFILE_DIR="$(MAKEFILE_DIR)"
 endef
 
-bin/dw: src/main.lisp src/find.lisp src/filesystem.lisp
+bin/dw: src/main.lisp src/find.lisp src/filesystem.lisp src/utility.lisp
 	mkdir -p bin
 	$(ENV) $(CCL) --load build-ccl.lisp
 
