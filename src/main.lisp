@@ -1,15 +1,21 @@
-(uiop:define-package :deadwood/main
-    (:nicknames :deadwood
-                :dw)
+(defpackage :deadwood
   (:use :cl
         :uiop)
   (:import-from :unix-opts)
-  (:use-reexport :deadwood/find
-                 :deadwood/filesystem
-                 :deadwood/utility)
-  (:export :main))
+  (:import-from :osicat)
+  (:export :main
+           :find-old-files
+           :is-file-recent
+           :is-dir-recent
+           :get-unix-time
+           :delete-if-subpath
+           :delete-file-if-subpath
+           :delete-directory-if-subpath
+           :report-removal-errors
+           :does-not-exist-error
+           :not-subpath-error))
 
-(in-package :deadwood/main)
+(in-package :deadwood)
 
 (opts:define-opts
   (:name :age

@@ -1,4 +1,10 @@
 (defsystem "deadwood"
-    :class :package-inferred-system
-    :pathname "src"
-    :depends-on (:deadwood/main))
+  :pathname "src"
+  :depends-on (:asdf
+               :unix-opts
+               :osicat)
+  :serial t
+  :components ((:file "main")
+               (:file "find")
+               (:file "filesystem")
+               (:file "utility")))

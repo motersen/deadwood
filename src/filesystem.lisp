@@ -1,13 +1,4 @@
-(uiop:define-package :deadwood/filesystem
-    (:use :cl :uiop)
-  (:export :delete-if-subpath
-           :delete-files-if-subpath
-           :delete-directories-if-subpath
-           :report-removal-errors
-           :does-not-exist-error
-           :not-subpath-error))
-
-(in-package :deadwood/filesystem)
+(in-package :deadwood)
 
 (defun delete-file-if-subpath (file-path base-path)
   (cond

@@ -1,13 +1,4 @@
-(uiop:define-package :deadwood/find
-  (:use :cl
-        :uiop)
-  (:import-from :osicat)
-  (:export :find-old-files
-           :is-file-recent
-           :is-dir-recent
-           :get-unix-time))
-
-(in-package :deadwood/find)
+(in-package :deadwood)
 
 (defun is-file-recent (path)
   (declare (special *age-limit*))

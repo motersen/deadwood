@@ -1,8 +1,4 @@
-(uiop:define-package :deadwood/utility
-    (:use :cl)
-  (:export :zip))
-
-(in-package :deadwood/utility)
+(in-package :deadwood)
 
 (defun zip (lists)
   (if (or (null lists)
