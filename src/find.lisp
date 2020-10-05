@@ -11,9 +11,14 @@
 
 (defun is-file-recent (path)
   (declare (special *age-limit*))
-      ;; check not directory
-  (let ((stats (nix:stat path)))
-    (< *age-limit* (nix:stat-atime stats))))
+  ;; check not directory
+  (handler-case
+      (let ((stats (nix:stat path)))
+        (< *age-limit* (nix:stat-atime stats)))
+    (nix:enoent ()
+      (format *error-output* "Error accessing '~a': File does not exist.~%"
+              path)
+      nil)))
 
 (defun directories-recent-p (subdirs)
   (if (null subdirs)
