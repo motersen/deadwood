@@ -60,12 +60,10 @@
                 (mapc
                  (lambda (dirs files base-path)
                    (mapc (lambda (dir)
-                           (delete-if-subpath dir base-path
-                                              :file-or-dir :directory))
+                           (delete-directory-if-subpath dir base-path))
                          dirs)
                    (mapc (lambda (file)
-                           (delete-if-subpath file base-path
-                                              :file-or-dir :file))
+                           (delete-file-if-subpath file base-path))
                          files))
                  old-dirs
                  old-files

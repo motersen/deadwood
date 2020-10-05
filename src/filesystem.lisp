@@ -9,25 +9,6 @@
 
 (in-package :deadwood/filesystem)
 
-(defun delete-if-subpath (path base-path &key file-or-dir)
-  (restart-case
-      (progn
-        (when (not file-or-dir)
-          (cond
-            ((directory-exists-p path)
-             (setq file-or-dir :directory))
-            ((file-exists-p path)
-             (setq file-or-dir :file))
-            (t
-             (error 'simple-file-error
-                    :pathname path))))
-        (ecase file-or-dir
-          (:directory
-           (delete-directory-if-subpath path base-path))
-          (:file
-           (delete-file-if-subpath path base-path))))
-    (skip ())))
-
 (defun delete-file-if-subpath (file-path base-path)
   (cond
     ((not (subpathp (pathname file-path)
