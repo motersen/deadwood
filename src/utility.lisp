@@ -5,7 +5,8 @@
 (in-package :deadwood/utility)
 
 (defun zip (lists)
-  (if (member-if #'null lists)
+  (if (or (null lists)
+          (member-if #'null lists))
       nil
       (cons (mapcar #'first lists)
             (zip (mapcar #'rest lists)))))
