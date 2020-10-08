@@ -89,3 +89,13 @@
   (:report (lambda (c stream)
              (format stream "Not a subpath of '~a'"
                      (base-path c)))))
+
+(defun subdirectories (directory)
+  #-ecl (uiop:subdirectories directory)
+  #+ecl (mapcar #'ecl-fix-utf8-pathname
+                (uiop:subdirectories directory)))
+
+(defun directory-files (&rest args)
+  #-ecl (apply #'uiop:directory-files args)
+  #+ecl (mapcar #'ecl-fix-utf8-pathname
+                (apply #'uiop:directory-files args)))

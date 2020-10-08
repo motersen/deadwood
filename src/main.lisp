@@ -1,4 +1,6 @@
 (defpackage :deadwood
+  (:shadow :subdirectories
+           :directory-files)
   (:use :cl
         :uiop)
   (:import-from :unix-opts)
