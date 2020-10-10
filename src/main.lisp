@@ -54,7 +54,9 @@
             (remove (getf options :remove))
             (paths (mapcar #'truename paths)))
         (multiple-value-bind (old-dirs old-files)
-            (values-list (zip (mapcar #'find-old-files paths)))
+            (values-list (zip (mapcar (lambda (p)
+                                        (find-old-files p :max-age maximum-age))
+                                      paths)))
           (if remove
               (handler-bind ((file-error #'report-removal-errors))
                 (mapc
