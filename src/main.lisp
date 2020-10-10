@@ -29,7 +29,8 @@
 (defun parse-options (&rest arguments)
   (handler-case
       (handler-bind ((opts:unknown-option #'unknown-option))
-        (apply #'opts:get-opts arguments))
+        (apply #'opts:get-opts (and arguments
+                                    (list arguments))))
     (opts:missing-arg (condition)
       (format t "option ~s needs an argument!~%"
               (opts:option condition))
