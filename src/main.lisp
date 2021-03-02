@@ -72,7 +72,6 @@
                          old-files
                          paths)))
               (mapc (lambda (dirs files)
-                      (format t "~{~a~%~}" dirs)
-                      (format t "~{~a~%~}" files))
+                      (format t "~@{~{~a~%~}~}" dirs files))
                     old-dirs
                     old-files)))))))
