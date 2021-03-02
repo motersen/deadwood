@@ -60,17 +60,17 @@
                                       paths)))
           (if remove
               (handler-bind ((file-error #'report-removal-errors))
-                (mapc
-                 (lambda (dirs files base-path)
-                   (mapc (lambda (dir)
-                           (delete-directory-if-subpath dir base-path))
-                         dirs)
-                   (mapc (lambda (file)
-                           (delete-file-if-subpath file base-path))
-                         files))
-                 old-dirs
-                 old-files
-                 paths))
+                (format t "~a deleted the following files and directories:~%"
+                        (pathname-name (pathname (first (opts:argv)))))
+                (format t "~{~{~a~%~}~}"
+                        (mapcar
+                         (lambda (dirs files base-path)
+                           (append
+                            (delete-directories-if-subpath dirs base-path)
+                            (delete-files-if-subpath files base-path)))
+                         old-dirs
+                         old-files
+                         paths)))
               (mapc (lambda (dirs files)
                       (format t "~{~a~%~}" dirs)
                       (format t "~{~a~%~}" files))

@@ -1,8 +1,8 @@
 (uiop:define-package :deadwood/filesystem
     (:use :cl :uiop)
   (:export :delete-if-subpath
-           :delete-file-if-subpath
-           :delete-directory-if-subpath
+           :delete-files-if-subpath
+           :delete-directories-if-subpath
            :report-removal-errors
            :does-not-exist-error
            :not-subpath-error))
@@ -22,16 +22,29 @@
             :pathname file-path
             :file-or-dir :file))
     (t
-     (delete-file-if-exists file-path))))
+     (delete-file file-path)
+     file-path)))
+
+(defun delete-files-if-subpath (file-paths base-path)
+  (if (null file-paths)
+      nil
+      (restart-case
+          (cons
+           (delete-file-if-subpath (car file-paths) base-path)
+           (delete-files-if-subpath (cdr file-paths) base-path))
+        (skip ()
+          (delete-files-if-subpath (cdr file-paths) base-path)))))
 
 (defun delete-directory-if-subpath (directory-path base-path)
   (let ((directory-path (ensure-directory-pathname directory-path))
         (base-path (ensure-directory-pathname base-path)))
     (handler-case
-        (delete-directory-tree
-         (ensure-directory-pathname directory-path)
-         :validate (lambda (p) (subpathp p base-path))
-         :if-does-not-exist :ignore)
+        (progn
+          (delete-directory-tree
+           (ensure-directory-pathname directory-path)
+           :validate (lambda (p) (subpathp p base-path))
+           :if-does-not-exist :ignore)
+          directory-path)
       (uiop/utility:parameter-error (c)
         (if (not (subpathp directory-path base-path))
             (error 'not-subpath-error
@@ -45,6 +58,16 @@
                    :pathname directory-path
                    :file-or-dir :directory)
             (error c))))))
+
+(defun delete-directories-if-subpath (directory-paths base-path)
+  (if (null directory-paths)
+      nil
+      (restart-case
+          (cons
+           (delete-directory-if-subpath (car directory-paths) base-path)
+           (delete-directories-if-subpath (cdr directory-paths) base-path))
+        (skip ()
+          (delete-directories-if-subpath (cdr directory-paths) base-path)))))
 
 (defun report-removal-errors (c)
   (format *error-output* "Error: Could not delete '~a': ~a~%"
