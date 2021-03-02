@@ -36,28 +36,28 @@
           (delete-files-if-subpath (cdr file-paths) base-path)))))
 
 (defun delete-directory-if-subpath (directory-path base-path)
-  (let ((directory-path (ensure-directory-pathname directory-path))
-        (base-path (ensure-directory-pathname base-path)))
-    (handler-case
-        (progn
-          (delete-directory-tree
-           (ensure-directory-pathname directory-path)
-           :validate (lambda (p) (subpathp p base-path))
-           :if-does-not-exist :ignore)
-          directory-path)
-      (uiop/utility:parameter-error (c)
-        (if (not (subpathp directory-path base-path))
-            (error 'not-subpath-error
-                   :pathname directory-path
-                   :base-path base-path
-                   :file-or-dir :directory)
-            (error c)))
-      (simple-error (c)
-        (if (not (directory-exists-p directory-path))
-            (error 'does-not-exist-error
-                   :pathname directory-path
-                   :file-or-dir :directory)
-            (error c))))))
+  (setf directory-path (ensure-directory-pathname directory-path)
+        base-path (ensure-directory-pathname base-path))
+  (handler-case
+      (progn
+        (delete-directory-tree
+         (ensure-directory-pathname directory-path)
+         :validate (lambda (p) (subpathp p base-path))
+         :if-does-not-exist :ignore)
+        directory-path)
+    (uiop/utility:parameter-error (c)
+      (if (not (subpathp directory-path base-path))
+          (error 'not-subpath-error
+                 :pathname directory-path
+                 :base-path base-path
+                 :file-or-dir :directory)
+          (error c)))
+    (simple-error (c)
+      (if (not (directory-exists-p directory-path))
+          (error 'does-not-exist-error
+                 :pathname directory-path
+                 :file-or-dir :directory)
+          (error c)))))
 
 (defun delete-directories-if-subpath (directory-paths base-path)
   (if (null directory-paths)
