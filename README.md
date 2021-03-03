@@ -18,3 +18,12 @@ Maximum age in days (default: 30)
 
 **-r, --remove**  
 remove stale files and directories
+
+### Build notes
+
+The master branch is configured to build using CCL via `make`. If you want to
+build using ECL, check out `ecl-build`, then run the build script build-ecl.lisp
+via ECL. The binary built using ECL is considerably smaller and its size can be
+further reduced by stripping. It takes noticeably longer to run which should
+however not be an issue in an expectable use case such as a weekly background
+job.
