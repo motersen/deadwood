@@ -1,4 +1,8 @@
-CCL=$(shell ros -L ccl-bin run -Q -- -h 2>&1 | sed -n '1p' | cut -d " " -f 2)
+ifeq ($(shell ros -L ccl-bin run -e '(quit)'; echo $$?), 1)
+	CCL=ccl
+else
+	CCL=$(shell ros -L ccl-bin run -Q -- -h 2>&1 | sed -n '1p' | cut -d " " -f 2)
+endif
 MAKEFILE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 DESTDIR=$(HOME)
 
